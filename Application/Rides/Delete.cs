@@ -1,6 +1,7 @@
 using System;
 using System.Threading;
 using System.Threading.Tasks;
+using Application.Core;
 using MediatR;
 using Persistence;
 
@@ -8,12 +9,12 @@ namespace Application.Rides
 {
     public class Delete
     {
-        public class Command : IRequest
+        public class Command : IRequest<Result<Unit>>
         {
             public Guid Id { get; set; }
         }
 
-        public class Handler : IRequestHandler<Command>
+        public class Handler : IRequestHandler<Command, Result<Unit>>
         {
             private readonly DataContext _context;
             public Handler(DataContext context)
@@ -21,15 +22,19 @@ namespace Application.Rides
                 _context = context;
             }
 
-            public async Task<Unit> Handle(Command request, CancellationToken cancellationToken)
+            public async Task<Result<Unit>> Handle(Command request, CancellationToken cancellationToken)
             {
-                var activity = await _context.Rides.FindAsync(request.Id);
+                var ride = await _context.Rides.FindAsync(request.Id);
 
-                _context.Remove(activity);
+                if (ride == null) return null;
 
-                await _context.SaveChangesAsync();
+                _context.Remove(ride);
 
-                return Unit.Value;
+                var result = await _context.SaveChangesAsync() > 0;
+
+                if (!result) return Result<Unit>.Failure("Failed to delete the ride");
+
+                return Result<Unit>.Success(Unit.Value);
             }
         }
     }
