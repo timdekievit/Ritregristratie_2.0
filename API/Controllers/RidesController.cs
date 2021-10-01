@@ -8,9 +8,9 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers
 {
+    [AllowAnonymous]
     public class RidesController : BaseApiController
     {
-
         [HttpGet]
         public async Task<ActionResult<List<Ride>>> GetRides()
         {

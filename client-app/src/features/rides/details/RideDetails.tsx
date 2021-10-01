@@ -4,34 +4,33 @@ import { useParams } from 'react-router-dom';
 import { Grid } from 'semantic-ui-react';
 // import LoadingComponent from '../../../app/layout/LoadingComponent';
 import { useStore } from '../../../app/stores/store';
+import RideDetailedHeader from './RideDetailedHeader';
 // import ActivityDetailedChat from './ActivityDetailedChat';
 // import ActivityDetailedHeader from './ActivityDetailedHeader';
 // import ActivityDetailedInfo from './ActivityDetailedInfo';
 // import ActivityDetailedSidebar from './ActivityDetailedSidebar';
 
 export default observer(function RideDetails(){
-
     const {rideStore} = useStore();
-    // const {selectedActivity: activity, loadActivity, loadingInititial} = activityStore;
-    // const {id} = useParams<{id: string}>();
+    const {selectedRide: ride, loadRide} = rideStore;
+    const {id} = useParams<{id: string}>();
 
-    // useEffect(() => {
-    //     if (id) loadActivity(id);
-    // },[id, loadActivity]);
+    useEffect(() => {
+        if (id) loadRide(id);
+    },[id, loadRide]);
 
-    // if (loadingInititial || !activity) return <LoadingComponent />;
+    if (!ride) return <></>;
 
     return (
-        // <Grid>
-        //     <Grid.Column width={10}>
-        //         <ActivityDetailedHeader activity={activity} />
-        //         <ActivityDetailedInfo activity={activity} />
-        //         <ActivityDetailedChat />
-        //     </Grid.Column>
-        //     <Grid.Column width={6}>
-        //         <ActivityDetailedSidebar />
-        //     </Grid.Column>
-        // </Grid>
-        <h1>Ride Details</h1>
+        <Grid>
+            <Grid.Column width={10}>
+                <RideDetailedHeader ride={ride!} />
+                {/* <ActivityDetailedInfo activity={activity} /> */}
+                {/* <ActivityDetailedChat /> */}
+            </Grid.Column>
+            <Grid.Column width={6}>
+                {/* <ActivityDetailedSidebar /> */}
+            </Grid.Column>
+        </Grid>
     );
 });
