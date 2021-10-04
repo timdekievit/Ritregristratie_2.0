@@ -1,5 +1,6 @@
  import React from 'react';
 import { Link } from 'react-router-dom';
+import { format } from "date-fns";
 import { Button, Icon, Item,  Segment } from 'semantic-ui-react';
 import { Ride } from '../../../app/models/ride';
 
@@ -25,7 +26,7 @@ export default function RideListItem({ride}: Props) {
             </Segment>
             <Segment>
                 <span>
-                    <Icon name='clock' /> {ride.date}
+                    <Icon name='clock' /> {format(ride.date!, 'dd MMM yyyy h:mm aa')}
                     {/* <Icon name='marker'/> {ride.venue} */}
                 </span>
             </Segment>

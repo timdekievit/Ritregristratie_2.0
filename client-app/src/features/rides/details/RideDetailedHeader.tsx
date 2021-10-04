@@ -1,5 +1,7 @@
+import { format } from 'date-fns';
 import { observer } from 'mobx-react-lite';
 import React from 'react'
+import { Link } from 'react-router-dom';
 import {Button, Header, Item, Segment} from 'semantic-ui-react'
 import { Ride } from '../../../app/models/ride';
 
@@ -34,7 +36,7 @@ export default observer (function RideDetailedHeader({ride}: Props) {
                                     content={ride.id}
                                     style={{color: 'white'}}
                                 />
-                                <p>{ride.date}</p>
+                                <p>{format(ride.date!, 'dd MMM yyyy')}</p>
                                 <p>
                                     Hosted by <strong>Bob</strong>
                                 </p>
@@ -46,8 +48,8 @@ export default observer (function RideDetailedHeader({ride}: Props) {
             <Segment clearing attached='bottom'>
                 <Button color='teal'>Join Activity</Button>
                 <Button>Cancel attendance</Button>
-                <Button color='orange' floated='right'>
-                    Manage Event
+                <Button as={Link} to={`/manage/${ride.id}`} color='orange' floated='right'>
+                    Edit Ride
                 </Button>
             </Segment>
         </Segment.Group>

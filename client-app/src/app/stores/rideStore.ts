@@ -1,3 +1,4 @@
+import { format } from "date-fns";
 import { makeAutoObservable, runInAction } from "mobx";
 import agent from "../api/agent";
 import { Ride } from "../models/ride";
@@ -15,13 +16,13 @@ export default class RideStore {
 
     get ridesByDate() {
         return Array.from(this.ridesRegistry.values()).sort((a, b) => 
-        Date.parse(a.date) - Date.parse(b.date));
+            a.date!.getTime() - b.date!.getTime());
     }
 
     get groupedRides() {
         return Object.entries(
             this.ridesByDate.reduce((rides, ride) => {
-                const date = ride.date;
+                const date = format(ride.date!, 'dd MMM yyyy')
                 rides[date] = rides[date] ? [...rides[date], ride] : [ride];
                 return rides;
             }, {} as {[key: string]: Ride[]})
@@ -65,7 +66,7 @@ export default class RideStore {
     }
 
     private setRide= (ride: Ride) => {
-        ride.date = ride.date.split('T')[0];
+        ride.date = new Date(ride.date!)
         this.ridesRegistry.set(ride.id, ride);
     }
 
