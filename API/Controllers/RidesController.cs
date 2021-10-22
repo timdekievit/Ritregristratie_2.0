@@ -8,11 +8,10 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers
 {
-    [AllowAnonymous]
     public class RidesController : BaseApiController
     {
         [HttpGet]
-        public async Task<ActionResult<List<Ride>>> GetRides()
+        public async Task<IActionResult> GetRides()
         {
             return HandleResult(await Mediator.Send(new List.Query()));
         }

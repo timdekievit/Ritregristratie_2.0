@@ -24,7 +24,8 @@ export default observer(function RideForm() {
         id: '',
         beginAddress: '',
         destination: '',
-        date: null
+        date: null,
+        user: null
     });
 
     const validationSchema = Yup.object({

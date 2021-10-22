@@ -12,5 +12,6 @@ namespace Persistence
 
         public DbSet<Ride> Rides { get; set; }
 
+
     }
 }

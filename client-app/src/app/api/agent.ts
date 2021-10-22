@@ -72,7 +72,7 @@ const request = {
 const Rides = {
     list: () => request.get<Ride[]>('/rides'),
     details: (id: string) => request.get<Ride>(`rides/${id}`),
-    create: (ride: Ride) => request.post<void>('/rides', ride),
+    create: (ride: Ride) => request.post<void>('/rides', ride), // TODO stuur User id mee 
     update: (ride: Ride) => request.put<void>(`/rides/${ride.id}`, ride),
     delete: (id: string) => request.del<void>(`rides/${id}`)
 }
