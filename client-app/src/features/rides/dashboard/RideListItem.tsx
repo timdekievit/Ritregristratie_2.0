@@ -14,12 +14,10 @@ export default function RideListItem({ride}: Props) {
             <Segment>
                 <Item.Group>
                     <Item>
-                        <Item.Image size='tiny' circular src='/assets/user.png' />
                         <Item.Content>
                             <Item.Header as={Link} to={`/rides/${ride.id}`}>
-                                {ride.id}
+                                ride from {ride.beginAddress} to {ride.destination}
                             </Item.Header>
-                            <Item.Description>Ride by Bob</Item.Description>
                         </Item.Content>
                     </Item>
                 </Item.Group>
@@ -31,7 +29,6 @@ export default function RideListItem({ride}: Props) {
                 </span>
             </Segment>
             <Segment clearing>
-                <span>{ride.beginAddress}</span>
                 <Button
                     as={Link}
                     to={`/rides/${ride.id}`}

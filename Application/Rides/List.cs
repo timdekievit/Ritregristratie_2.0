@@ -1,7 +1,9 @@
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Application.Core;
+using Application.Interfaces;
 using AutoMapper;
 using Domain;
 using MediatR;
@@ -18,17 +20,27 @@ namespace Application.Rides
         {
             private readonly DataContext _context;
             private readonly IMapper _mapper;
-            public Handler(DataContext context, IMapper mapper)
+            private readonly IUserAccessor _userAccessor;
+            public Handler(DataContext context, IMapper mapper, IUserAccessor userAccessor)
             {
+                _userAccessor = userAccessor;
                 _mapper = mapper;
                 _context = context;
             }
 
             public async Task<Result<List<RideDto>>> Handle(Query request, CancellationToken cancellationToken)
             {
+                var user = await _context.Users.FirstOrDefaultAsync(x => x.UserName ==
+                    _userAccessor.GetUsername());
+
                 var rides = await _context.Rides
-                .Include(u => u.User)
-                .ToListAsync();
+                    .Where(u => u.User.UserName == user.UserName)
+                    .OrderBy(r => r.Date)
+                    .ToListAsync();
+
+                // var rides = await _context.Rides
+                // .Include(u => u.User)
+                // .ToListAsync();
 
                 var ridesToReturn = _mapper.Map<List<RideDto>>(rides);
 

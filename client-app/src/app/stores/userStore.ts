@@ -29,6 +29,7 @@ export default class UserStore {
 
     logout = () => {
         store.commonStore.setToken(null);
+        store.rideStore.ridesRegistry.clear();
         window.localStorage.removeItem('jwt');
         this.user = null;
         history.push('/');
