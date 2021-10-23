@@ -16,19 +16,19 @@ export default function RideListItem({ride}: Props) {
                     <Item>
                         <Item.Content>
                             <Item.Header as={Link} to={`/rides/${ride.id}`}>
-                                ride from {ride.beginAddress} to {ride.destination}
+                                <span> 
+                                    <Icon name='road'></Icon> ride from {ride.beginAddress} to {ride.destination}
+                                </span>
                             </Item.Header>
                         </Item.Content>
                     </Item>
                 </Item.Group>
             </Segment>
-            <Segment>
+            <Segment clearing>
                 <span>
-                    <Icon name='clock' /> {format(ride.date!, 'dd MMM yyyy h:mm aa')}
+                    <Icon name='clock' /> {format(ride.date!, 'dd MMM yyyy')}
                     {/* <Icon name='marker'/> {ride.venue} */}
                 </span>
-            </Segment>
-            <Segment clearing>
                 <Button
                     as={Link}
                     to={`/rides/${ride.id}`}

@@ -5,5 +5,10 @@ export interface Ride {
     beginAddress: string;
     destination: string;
     date: Date | null;
-    user: User | null;
+    profile: Profile | null;
+}
+
+export interface Profile {
+    userName: string;
+    displayName: string
 }

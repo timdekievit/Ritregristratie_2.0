@@ -1,6 +1,6 @@
 import React from 'react'
 import { Link, NavLink } from 'react-router-dom';
-import { Button, Container, Menu, Image, Dropdown } from 'semantic-ui-react'
+import { Button, Container, Menu, Image, Dropdown, Icon } from 'semantic-ui-react'
 import { useStore } from '../stores/store';
 
 export default function NavBar() {
@@ -10,7 +10,8 @@ export default function NavBar() {
         <Menu inverted fixed='top'>
             <Container>
                 <Menu.Item as={NavLink} to='/' exact header>
-                    <img src="assets/logo.png" alt="logo" style={{marginRight: '10px'}}/>
+                    {/* <img src="assets/logo.png" alt="logo" style={{marginRight: '10px'}}/> */}
+                    <Icon name='car' size='big'/>
                     RideRegistration
                 </Menu.Item>
                 <Menu.Item as={NavLink} to='/rides' name='Rides'/>

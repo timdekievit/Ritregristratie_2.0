@@ -2,8 +2,6 @@ import { format } from "date-fns";
 import { makeAutoObservable, runInAction } from "mobx";
 import agent from "../api/agent";
 import { Ride } from "../models/ride";
-import { User } from "../models/user";
-import { store } from "./store";
 
 export default class RideStore {
     ridesRegistry = new Map<string, Ride>();
@@ -81,11 +79,6 @@ export default class RideStore {
     // }
 
     createRide = async (ride: Ride) => {
-        // this.loading = true;
-        const user = store.userStore.user;
-        console.log(user);
-        if(user) ride.user = user;
-        console.log(ride);
         try {
             await agent.Rides.create(ride);
             runInAction(() => {
