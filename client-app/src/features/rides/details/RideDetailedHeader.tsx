@@ -32,8 +32,7 @@ export default observer(function RideDetailedHeader({ ride }: Props) {
                         <Item.Content>
                             <Header
                                 size='huge'
-                                content={ride.id}
-                                style={{ color: 'white' }}
+                                content={`ride from ${ride.beginAddress} to ${ride.destination}`}
                             />
                             <p>{format(ride.date!, 'dd MMM yyyy h:mm aa')}</p>
                             <p>
