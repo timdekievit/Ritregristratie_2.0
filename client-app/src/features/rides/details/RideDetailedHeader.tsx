@@ -23,7 +23,6 @@ interface Props {
 }
 
 export default observer(function RideDetailedHeader({ ride }: Props) {
-    console.log(ride);
     return (
         <Segment.Group>
             <Segment clearing>

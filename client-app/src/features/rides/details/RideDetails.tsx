@@ -5,6 +5,7 @@ import { Grid } from 'semantic-ui-react';
 // import LoadingComponent from '../../../app/layout/LoadingComponent';
 import { useStore } from '../../../app/stores/store';
 import RideDetailedHeader from './RideDetailedHeader';
+import Map from '../../map/Map'
 // import ActivityDetailedChat from './ActivityDetailedChat';
 // import ActivityDetailedHeader from './ActivityDetailedHeader';
 // import ActivityDetailedInfo from './ActivityDetailedInfo';
@@ -25,6 +26,7 @@ export default observer(function RideDetails(){
         <Grid>
             <Grid.Column width={10}>
                 <RideDetailedHeader ride={ride!} />
+                <Map ride={ride!} />
                 {/* <ActivityDetailedInfo activity={activity} /> */}
                 {/* <ActivityDetailedChat /> */}
             </Grid.Column>
