@@ -1,5 +1,3 @@
-import { User } from "./user";
-
 export interface Ride {
     id: string;
     beginAddress: string;
@@ -12,3 +10,15 @@ export interface Profile {
     userName: string;
     displayName: string
 }
+
+export enum TravelMode {
+    BICYCLING = 'BICYCLING',
+    DRIVING = 'DRIVING',
+    TRANSIT = 'TRANSIT',
+    WALKING = 'WALKING',
+  }
+
+export enum UnitSystem {
+    IMPERIAL = 0.0,
+    METRIC = 1.0,
+  }  

@@ -9,6 +9,7 @@ using Microsoft.OpenApi.Models;
 using Persistence;
 using Application.Interfaces;
 using Infrastructure.Security;
+using Infrastructure.GoogleMaps;
 
 namespace API.Extensions
 {
@@ -35,6 +36,9 @@ namespace API.Extensions
             services.AddMediatR(typeof(List.Handler).Assembly);
             services.AddAutoMapper(typeof(MappingProfiles).Assembly);
             services.AddScoped<IUserAccessor, UserAccessor>();
+            
+            services.AddOptions();
+            services.Configure<GoogleMapsSettings>(config.GetSection("GoogleMaps"));
 
             return services;
         } 

@@ -83,9 +83,14 @@ const Account = {
     register: (user: UserFormValues) => request.post<User>('/account/register', user)
 }
 
+const GoogleMaps = {
+    apiKey: () => request.get<string>('/googleMaps')
+}
+
 const agent = {
     Rides,
-    Account
+    Account,
+    GoogleMaps
 }
 
 export default agent;

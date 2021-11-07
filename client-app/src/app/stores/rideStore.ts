@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 import { format } from "date-fns";
 import { makeAutoObservable, runInAction } from "mobx";
 import agent from "../api/agent";
@@ -6,12 +7,14 @@ import { Ride } from "../models/ride";
 export default class RideStore {
     ridesRegistry = new Map<string, Ride>();
     selectedRide: Ride | undefined = undefined;
+    apiKey: string = '';
     // editMode = false;
     // loading = false;
     // loadingInititial = true;
 
     constructor() {
         makeAutoObservable(this)
+        this.loadApiKey();
     }
 
     get ridesByDate() {
@@ -29,6 +32,13 @@ export default class RideStore {
         )
     }
 
+    loadApiKey = async () => {
+        try {
+            this.apiKey = await agent.GoogleMaps.apiKey();
+        } catch (error) {
+            console.log(error);
+        }
+    }
 
     loadRides = async () => {
         // this.loadingInititial = true;
@@ -63,6 +73,17 @@ export default class RideStore {
                 // this.setLoadingInitial(false);
             }
         }
+    }
+
+    getDistance = async (ride: Ride) => {
+        var service = new google.maps.DistanceMatrixService();
+        service.getDistanceMatrix({
+            origins: [ride.beginAddress],
+            destinations: [ride.destination],
+            travelMode: google.maps.TravelMode.DRIVING,
+            unitSystem: google.maps.UnitSystem.METRIC
+        });
+        console.log(service);
     }
 
     private setRide= (ride: Ride) => {

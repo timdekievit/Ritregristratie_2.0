@@ -24,14 +24,9 @@ export default observer(function RideDetails(){
 
     return (
         <Grid>
-            <Grid.Column width={10}>
+            <Grid.Column width={16}>
                 <RideDetailedHeader ride={ride!} />
                 <Map ride={ride!} />
-                {/* <ActivityDetailedInfo activity={activity} /> */}
-                {/* <ActivityDetailedChat /> */}
-            </Grid.Column>
-            <Grid.Column width={6}>
-                {/* <ActivityDetailedSidebar /> */}
             </Grid.Column>
         </Grid>
     );
