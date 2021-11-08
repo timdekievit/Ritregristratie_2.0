@@ -2,12 +2,15 @@
 import { format } from "date-fns";
 import { makeAutoObservable, runInAction } from "mobx";
 import agent from "../api/agent";
+import { Pagination, PagingParams } from "../models/pagination";
 import { Ride } from "../models/ride";
 
 export default class RideStore {
     ridesRegistry = new Map<string, Ride>();
     selectedRide: Ride | undefined = undefined;
     apiKey: string = '';
+    pagination: Pagination | null = null;
+    pagingParams = new PagingParams();
     // editMode = false;
     // loading = false;
     // loadingInititial = true;
@@ -15,6 +18,17 @@ export default class RideStore {
     constructor() {
         makeAutoObservable(this)
         this.loadApiKey();
+    }
+
+    setPagingParams = (pagingParams: PagingParams) => {
+        this.pagingParams = pagingParams;
+    }
+
+    get axiosParams() {
+        const params = new URLSearchParams();
+        params.append('pageNumber', this.pagingParams.pageNumber.toString());
+        params.append('pageSize', this.pagingParams.pageSize.toString());
+        return params;
     }
 
     get ridesByDate() {
@@ -43,15 +57,20 @@ export default class RideStore {
     loadRides = async () => {
         // this.loadingInititial = true;
         try {
-            const rides = await agent.Rides.list();
-            rides.forEach(ride => {
+            const result = await agent.Rides.list(this.axiosParams);
+            result.data.forEach(ride => {
                 this.setRide(ride);
             });
+            this.setPagination(result.pagination)
             // this.setLoadingInitial(false);
         } catch (error) {
             console.log(error);
             // this.setLoadingInitial(false);
         }
+    }
+
+    setPagination = (pagination: Pagination) => {
+        this.pagination = pagination;
     }
 
     loadRide = async (id: string) => {

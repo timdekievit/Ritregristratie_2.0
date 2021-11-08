@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Application.Core;
 using Application.Rides;
 using Domain;
 using Microsoft.AspNetCore.Authorization;
@@ -11,9 +12,9 @@ namespace API.Controllers
     public class RidesController : BaseApiController
     {
         [HttpGet]
-        public async Task<IActionResult> GetRides()
+        public async Task<IActionResult> GetRides([FromQuery]PagingParams param)
         {
-            return HandleResult(await Mediator.Send(new List.Query()));
+            return HandlePagedResult(await Mediator.Send(new List.Query{Params = param}));
         }
         
         [HttpGet("{id}")]

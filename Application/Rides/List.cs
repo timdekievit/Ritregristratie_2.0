@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Application.Core;
 using Application.Interfaces;
 using AutoMapper;
+using AutoMapper.QueryableExtensions;
 using Domain;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
@@ -14,9 +15,12 @@ namespace Application.Rides
 {
     public class List
     {
-        public class Query : IRequest<Result<List<RideDto>>> { }
+        public class Query : IRequest<Result<PagedList<RideDto>>>
+        {
+            public PagingParams Params { get; set; }
+        }
 
-        public class Handler : IRequestHandler<Query, Result<List<RideDto>>>
+        public class Handler : IRequestHandler<Query, Result<PagedList<RideDto>>>
         {
             private readonly DataContext _context;
             private readonly IMapper _mapper;
@@ -28,23 +32,22 @@ namespace Application.Rides
                 _context = context;
             }
 
-            public async Task<Result<List<RideDto>>> Handle(Query request, CancellationToken cancellationToken)
+            public async Task<Result<PagedList<RideDto>>> Handle(Query request, CancellationToken cancellationToken)
             {
                 var user = await _context.Users.FirstOrDefaultAsync(x => x.UserName ==
                     _userAccessor.GetUsername());
 
-                var rides = await _context.Rides
+                var query = _context.Rides
                     .Where(u => u.User.UserName == user.UserName)
                     .OrderBy(r => r.Date)
-                    .ToListAsync();
+                    .ProjectTo<RideDto>(_mapper.ConfigurationProvider,
+                        new { currentUsername = user })
+                    .AsQueryable();
 
-                // var rides = await _context.Rides
-                // .Include(u => u.User)
-                // .ToListAsync();
-
-                var ridesToReturn = _mapper.Map<List<RideDto>>(rides);
-
-                return Result<List<RideDto>>.Success(ridesToReturn);
+                return Result<PagedList<RideDto>>.Success(
+                    await PagedList<RideDto>.CreateAsync(query,
+                        request.Params.PageNumber, request.Params.PageSize)
+                );
             }
         }
     }
