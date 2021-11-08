@@ -17,7 +17,7 @@ namespace Application.Rides
     {
         public class Query : IRequest<Result<PagedList<RideDto>>>
         {
-            public PagingParams Params { get; set; }
+            public RideParams Params { get; set; }
         }
 
         public class Handler : IRequestHandler<Query, Result<PagedList<RideDto>>>
@@ -39,10 +39,20 @@ namespace Application.Rides
 
                 var query = _context.Rides
                     .Where(u => u.User.UserName == user.UserName)
-                    .OrderBy(r => r.Date)
+                    .OrderByDescending(r => r.Date)
                     .ProjectTo<RideDto>(_mapper.ConfigurationProvider,
                         new { currentUsername = user })
                     .AsQueryable();
+
+                if (request.Params.OrderByRecent == false)
+                {
+                    query = _context.Rides
+                        .Where(u => u.User.UserName == user.UserName)
+                        .OrderBy(r => r.Date)
+                        .ProjectTo<RideDto>(_mapper.ConfigurationProvider,
+                            new { currentUsername = user })
+                        .AsQueryable();
+                }
 
                 return Result<PagedList<RideDto>>.Success(
                     await PagedList<RideDto>.CreateAsync(query,

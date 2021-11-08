@@ -1,6 +1,6 @@
 /* eslint-disable no-undef */
 import { format } from "date-fns";
-import { makeAutoObservable, runInAction } from "mobx";
+import { makeAutoObservable, reaction, runInAction } from "mobx";
 import agent from "../api/agent";
 import { Pagination, PagingParams } from "../models/pagination";
 import { Ride } from "../models/ride";
@@ -11,29 +11,71 @@ export default class RideStore {
     apiKey: string = '';
     pagination: Pagination | null = null;
     pagingParams = new PagingParams();
+    orderByRecent = true;
+    predicate = new Map().set('orderByRecent', true);
     // editMode = false;
-    // loading = false;
-    // loadingInititial = true;
+    loading = false;
+    loadingInititial = true;
 
     constructor() {
         makeAutoObservable(this)
         this.loadApiKey();
+
+        reaction(
+            () => this.orderByRecent,
+            () => {
+                this.pagingParams = new PagingParams();
+                this.ridesRegistry.clear();
+                this.loadRides();
+            }
+        )
     }
 
     setPagingParams = (pagingParams: PagingParams) => {
         this.pagingParams = pagingParams;
     }
 
+    setPredicate = (predicate: string) => {
+        // const resetPredicate = () => {
+        //     this.predicate.forEach((value, key) => {
+                
+        //     })
+        // }
+        switch (predicate) {
+            case 'orderByRecent':
+                this.predicate.set('orderByRecent', true);
+                this.orderByRecent = true;
+                console.log('new')
+                break;
+            case 'orderByOld':
+                this.predicate.set('orderByRecent', false);
+                this.orderByRecent = false;
+                console.log('old')
+                break;     
+                
+        }
+    }
+
     get axiosParams() {
         const params = new URLSearchParams();
         params.append('pageNumber', this.pagingParams.pageNumber.toString());
         params.append('pageSize', this.pagingParams.pageSize.toString());
+        this.predicate.forEach((value, key) => {
+            params.append(key, value);
+        })
         return params;
     }
 
     get ridesByDate() {
-        return Array.from(this.ridesRegistry.values()).sort((a, b) => 
+        if(this.orderByRecent) {
+            return Array.from(this.ridesRegistry.values()).sort((a, b) => 
+            b.date!.getTime() - a.date!.getTime());
+        }
+        else {
+            return Array.from(this.ridesRegistry.values()).sort((a, b) => 
             a.date!.getTime() - b.date!.getTime());
+        }
+
     }
 
     get groupedRides() {
@@ -54,18 +96,22 @@ export default class RideStore {
         }
     }
 
+    setLoadingInitial = (state: boolean) => {
+        this.loadingInititial = state;
+    }
+
     loadRides = async () => {
-        // this.loadingInititial = true;
+        this.loadingInititial = true;
         try {
             const result = await agent.Rides.list(this.axiosParams);
             result.data.forEach(ride => {
                 this.setRide(ride);
             });
             this.setPagination(result.pagination)
-            // this.setLoadingInitial(false);
+            this.setLoadingInitial(false);
         } catch (error) {
             console.log(error);
-            // this.setLoadingInitial(false);
+            this.setLoadingInitial(false);
         }
     }
 
@@ -114,9 +160,6 @@ export default class RideStore {
         return this.ridesRegistry.get(id);
     }
 
-    // setLoadingInitial = (state: boolean) => {
-    //     this.loadingInititial = state;
-    // }
 
     createRide = async (ride: Ride) => {
         try {

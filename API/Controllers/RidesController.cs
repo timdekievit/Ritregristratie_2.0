@@ -12,7 +12,7 @@ namespace API.Controllers
     public class RidesController : BaseApiController
     {
         [HttpGet]
-        public async Task<IActionResult> GetRides([FromQuery]PagingParams param)
+        public async Task<IActionResult> GetRides([FromQuery]RideParams param)
         {
             return HandlePagedResult(await Mediator.Send(new List.Query{Params = param}));
         }
