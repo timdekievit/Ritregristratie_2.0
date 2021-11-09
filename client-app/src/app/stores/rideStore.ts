@@ -13,7 +13,6 @@ export default class RideStore {
     pagingParams = new PagingParams();
     orderByRecent = true;
     predicate = new Map().set('orderByRecent', true);
-    // editMode = false;
     loading = false;
     loadingInititial = true;
 
@@ -36,21 +35,14 @@ export default class RideStore {
     }
 
     setPredicate = (predicate: string) => {
-        // const resetPredicate = () => {
-        //     this.predicate.forEach((value, key) => {
-                
-        //     })
-        // }
         switch (predicate) {
             case 'orderByRecent':
                 this.predicate.set('orderByRecent', true);
                 this.orderByRecent = true;
-                console.log('new')
                 break;
             case 'orderByOld':
                 this.predicate.set('orderByRecent', false);
                 this.orderByRecent = false;
-                console.log('old')
                 break;     
                 
         }

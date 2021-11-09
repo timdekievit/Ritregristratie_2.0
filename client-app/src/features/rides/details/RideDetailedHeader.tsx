@@ -2,24 +2,11 @@
 import { DistanceMatrixService, LoadScript } from '@react-google-maps/api';
 import { format } from 'date-fns';
 import { observer } from 'mobx-react-lite';
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import { Link } from 'react-router-dom';
 import { Button, Header, Item, Segment } from 'semantic-ui-react'
 import { Ride, TravelMode, UnitSystem } from '../../../app/models/ride';
 import { useStore } from '../../../app/stores/store';
-
-// const activityImageStyle = {
-//     filter: 'brightness(30%)'
-// };
-
-// const activityImageTextStyle = {
-//     position: 'absolute',
-//     bottom: '5%',
-//     left: '5%',
-//     width: '100%',
-//     height: 'auto',
-//     color: 'white'
-// };
 
 interface Props {
     ride: Ride
@@ -30,19 +17,11 @@ interface Props {
 export default observer(function RideDetailedHeader({ ride }: Props) {
     let [distance, setDistance] = useState<any>();
     const {rideStore} = useStore();
-    // const {rideStore} = useStore();
-    // rideStore.getDistance(ride);
 
     const distanceCallback = (response: any) => {
-        console.log(response)
         var km = response.rows[0].elements[0].distance.value / 1000
         setDistance(km);
     }
-
-    useEffect(() => {
-        console.log('use effect ran')
-        console.log(distance)
-    }, [distance])
 
     return (
         <>
@@ -58,9 +37,6 @@ export default observer(function RideDetailedHeader({ ride }: Props) {
                         unitSystem: UnitSystem.METRIC
                     }}
                     callback={distanceCallback}
-                    onLoad={distanceMatrixService => {
-                        console.log('DistanceMatrixService onLoad directionsService: ', distanceMatrixService)
-                    }}
                 />)}
             </LoadScript>
             <Segment.Group>

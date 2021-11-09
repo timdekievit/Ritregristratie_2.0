@@ -23,18 +23,10 @@ export default function Map({ ride }: Props) {
   let [directions, setDirections] = useState();
   const { rideStore } = useStore();
 
-  // useEffect(() => {
-  //   console.log('use effect ran')
-  //   console.log(directions)
-  // }, [directions])
 
   const directionsCallback = (response: any) => {
-    console.log(response)
-
     if (response !== null) {
       if (response.status === 'OK' && directions === undefined) {
-
-        console.log(response)
         setDirections(response);
       } else {
         console.log('response: ', response)
@@ -65,12 +57,6 @@ export default function Map({ ride }: Props) {
                   travelMode: TravelMode.DRIVING
                 }}
                 callback={directionsCallback}
-                onLoad={directionsService => {
-                  console.log('DirectionsService onLoad directionsService: ', directionsService)
-                }}
-                onUnmount={directionsService => {
-                  console.log('DirectionsService onUnmount directionsService: ', directionsService)
-                }}
               />
             )
           }
@@ -82,16 +68,9 @@ export default function Map({ ride }: Props) {
                 options={{
                   directions: directions
                 }}
-                onLoad={directionsRenderer => {
-                  console.log('DirectionsRenderer onLoad directionsRenderer: ', directionsRenderer)
-                }}
-
               />
             )
           }
-
-
-          { /* Child components, such as markers, info windows, etc. */}
           <></>
         </GoogleMap>
       </LoadScript>
