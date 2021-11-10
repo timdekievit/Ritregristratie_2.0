@@ -1,4 +1,3 @@
-
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -29,7 +28,7 @@ namespace Persistence
             
             if (context.Rides.Any()) return;
             
-            var activities = new List<Ride>
+            var rides = new List<Ride>
             {
                 new Ride
                 {
@@ -49,14 +48,13 @@ namespace Persistence
 
                 new Ride
                 {
-                    
                     BeginAddress = "Denhaag",
                     Destination = "Zoetermeer",
                     Date = DateTime.Now.AddDays(-5),
                 },
             };
 
-            await context.Rides.AddRangeAsync(activities);
+            await context.Rides.AddRangeAsync(rides);
             await context.SaveChangesAsync();
         }
     }

@@ -3,7 +3,6 @@ import { useEffect } from 'react';
 import React, { useState } from 'react';
 import { Link, useHistory, useParams } from 'react-router-dom';
 import { Button, Header, Segment } from 'semantic-ui-react';
-// import LoadingComponent from '../../../app/layout/LoadingComponent';
 import { useStore } from '../../../app/stores/store';
 import { v4 as uuid } from 'uuid';
 import { Formik, Form } from 'formik';
@@ -11,13 +10,14 @@ import * as Yup from 'yup';
 import MyTextInput from '../../../app/common/form/MyTextInput';
 import MyDateInput from '../../../app/common/form/MyDateInput';
 import { Ride } from '../../../app/models/ride';
+import LoadingComponent from '../../../app/layout/LoadingComponent';
 
 
 export default observer(function RideForm() {
 
     const history = useHistory();
     const { rideStore } = useStore();
-    const { createRide, updateRide, loadRide } = rideStore;
+    const { createRide, updateRide, loadRide, loadingInititial } = rideStore;
     const { id } = useParams<{ id: string }>();
 
     const [ride, setRide] = useState<Ride>({
@@ -51,7 +51,7 @@ export default observer(function RideForm() {
 
     }
 
-    // if (loadingInititial) return <LoadingComponent content='loading activity...' />
+    if (loadingInititial) return <LoadingComponent content='loading ride...' />
 
     return (
         <Segment clearing>
@@ -72,13 +72,13 @@ export default observer(function RideForm() {
                             dateFormat='MMMM d, yyyy h:mm aa'
                         />
                         <Button
-                            // disabled={isSubmitting || !dirty || !isValid}
                             disabled={ isSubmitting || !dirty || !isValid}
                             floated='right' positive
+                            loading={isSubmitting} 
                             type='submit'
                             content='Submit'
                         />
-                        <Button as={Link} to='rides' floated='right' type='button' content='Cancel' />
+                        <Button as={Link} to='/rides' floated='right' type='button' content='Cancel' />
                     </Form>
                 )}
             </Formik>

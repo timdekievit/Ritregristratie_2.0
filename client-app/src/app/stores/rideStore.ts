@@ -1,4 +1,3 @@
-/* eslint-disable no-undef */
 import { format } from "date-fns";
 import { makeAutoObservable, reaction, runInAction } from "mobx";
 import agent from "../api/agent";
@@ -117,17 +116,18 @@ export default class RideStore {
             this.selectedRide = ride;
             return ride;
         } else {
-            // this.loadingInititial = true;
+            this.loadingInititial = true;
             try {
                 ride = await agent.Rides.details(id);
                 this.setRide(ride);
                 runInAction(() => {
                     this.selectedRide= ride;
                 })
+                this.setLoadingInitial(false);
                 return ride;
             } catch (error) {
                 console.log(error);
-                // this.setLoadingInitial(false);
+                this.setLoadingInitial(false);
             }
         }
     }
@@ -159,46 +159,48 @@ export default class RideStore {
             runInAction(() => {
                 this.ridesRegistry.set(ride.id, ride);
                 this.selectedRide = ride;
-                // this.editMode = false;
-                // this.loading = false;
+                this.loading = false;
             })
         } catch (error) {
             console.log(error);
             runInAction(() => {
-                // this.loading = false;
+                this.loading = false;
             })
         }
     }
 
     updateRide = async (ride: Ride) => {
-        // this.loading = true;
+        this.loading = true;
         try {
             await agent.Rides.update(ride);
             runInAction(() => {
                 this.ridesRegistry.set(ride.id, ride);
                 this.selectedRide = ride;
-                // this.editMode = false;
             })
         } catch (error) {
             console.log(error);
             runInAction(() => {
-                // this.loading = false;
+                this.loading = false;
             });
         }
     }
 
-    deleteActivity = async (id: string) => {
-        // this.loading = true;
+    clearSelectedRide = () => {
+        this.selectedRide = undefined;
+    }
+
+    deleteRide = async (id: string) => {
+        this.loading = true;
         try {
             await agent.Rides.delete(id);
             runInAction(() => {
                 this.ridesRegistry.delete(id);
-                // this.loading = false;
+                this.loading = false;
             })
         } catch (error) {
             console.log(error);
             runInAction(() => {
-                // this.loading = false;
+                this.loading = false;
             })
         }
     }

@@ -10,8 +10,8 @@ import RideForm from '../../features/rides/form/RideForm';
 import { ToastContainer } from 'react-toastify';
 import NotFound from '../../features/errors/NotFound';
 import { useStore } from '../stores/store';
-import LoginForm from '../../features/users/LoginForm';
 import ModalContainer from '../common/modals/ModalContainer';
+import PrivateRoute from './PrivateRoute';
 
 function App() {
   const location = useLocation();
@@ -36,10 +36,9 @@ function App() {
             <NavBar />
             <Container style={{ marginTop: '7em' }}>
               <Switch>
-                <Route exact path='/rides' component={RideDashboard} />
-                <Route path='/rides/:id' component={RideDetails} />
-                <Route key={location.key} path={['/createRide', '/manage/:id']} component={RideForm} />
-                <Route path='/login' component={LoginForm} />
+                <PrivateRoute exact path='/rides' component={RideDashboard} />
+                <PrivateRoute path='/rides/:id' component={RideDetails} />
+                <PrivateRoute key={location.key} path={['/createRide', '/manage/:id']} component={RideForm} />
                 <Route component={NotFound} />
               </Switch>
             </Container>

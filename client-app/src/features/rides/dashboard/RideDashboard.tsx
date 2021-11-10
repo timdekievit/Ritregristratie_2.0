@@ -25,8 +25,6 @@ export default observer(function RideDashboard() {
         if (ridesRegistry.size <= 1) loadRides();
     }, [ridesRegistry.size, loadRides])
   
-    // if (activityStore.loadingInititial) return <LoadingComponent content='Loading app' />
-
     return (
         <Grid>
             <Grid.Column width='10'>
